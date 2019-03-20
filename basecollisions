@@ -2,9 +2,10 @@ int sum_collision = 0;
 int sol = 500;
 int saut = 20;
 int initspeed = 20;
-int speed = 10;
+int speed = initspeed;
+int gravity = 1;
 boolean keys[];
-boolean saut1;
+boolean saut1 = false, saut2 = false;
 
 // Joueur 1
 int p1width = 30, p1height = 30, p1x = 10, p1y = sol - p1width;
@@ -19,8 +20,6 @@ void setup(){
 void draw(){
   background(255);
   frameRate(120);
-  
-
   
   // Plateforme
   fill(0);
@@ -42,6 +41,9 @@ void draw(){
   
   // Sol
   sol();
+  
+  // Gravité
+  gravite();
 }
 
 void keyPressed(){
@@ -91,11 +93,11 @@ void keyReleased(){
 void deplacement() { 
  if (keys[0] && verifCollisionLeft1() == 0) p1x--; 
  if (keys[1] && verifCollisionRight1() == 0) p1x++; 
- if (keys[2] && verifCollisionUp1() == 0) p1y--;
+ if (keys[2] && verifCollisionUp1() == 0) saut1 = true;
  if (keys[3] && verifCollisionDown1() == 0) p1y++;
  if (keys[4] && verifCollisionLeft2() == 0) p2x--;
  if (keys[5] && verifCollisionRight2() == 0) p2x++;
- if (keys[6] && verifCollisionUp2() == 0) p2y--;
+ if (keys[6] && verifCollisionUp2() == 0) saut2 = true;
  if (keys[7] && verifCollisionDown2() == 0) p2y++; 
 }
 
@@ -105,6 +107,19 @@ void sol(){
   }
   if(p2y + p2height >= sol){
     p2y = sol - p2height;
+  }
+}
+
+void gravite(){
+  if(saut1){
+    p1y -= speed;
+    if(p1y >= sol - p1height){
+      p1y = sol - p1height;
+      speed = initspeed;
+      saut1 = false;
+    } else {
+      speed -= gravity;
+    }
   }
 }
 
