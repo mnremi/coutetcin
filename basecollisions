@@ -2,14 +2,13 @@ int sum_collision = 0;
 int sol = 500;
 int saut = 20;
 int initspeed = 20;
-int speed = initspeed;
+int speed1, speed2 = initspeed;
 int gravity = 1;
+
 boolean keys[];
 boolean saut1 = false, saut2 = false;
 
-// Joueur 1
 int p1width = 30, p1height = 30, p1x = 10, p1y = sol - p1width;
-// Joueur 2
 int p2width = 30, p2height = 30, p2x = 50, p2y = sol - p2width;
 
 void setup(){
@@ -24,7 +23,7 @@ void draw(){
   // Plateforme
   fill(0);
   noStroke();
-  rect(0, sol, 800, 100);
+  rect(0, sol, width, 100);
   
   // Joueur 1, bleu
   fill(0, 0, 255);
@@ -36,57 +35,43 @@ void draw(){
   noStroke();
   rect(p2x, p2y, p2width, p2height);
   
-  // Déplacement
   deplacement();
-  
-  // Sol
   sol();
-  
-  // Gravité
+  mur();
   gravite();
+  
+  // Affichage
+  textSize(20);
+  text(gravity, 10, 20);
+  text(speed1, 10, 40);
+  text(speed2, 10, 60);
 }
 
 void keyPressed(){
 // Joueur 1 //
-  // LEFT
-  if(key == 'q') keys[0] = true;
-  // RIGHT
-  if(key == 'd') keys[1] = true;
-  // UP
-  if(key == 'z') keys[2] = true;
-  // DOWN
-  if(key == 's') keys[3] = true;
-  
+  if(key == 'q') keys[0] = true;  // LEFT
+  if(key == 'd') keys[1] = true;  // RIGHT
+  if(key == 'z') keys[2] = true;  // UP
+  if(key == 's') keys[3] = true;  // DOWN
+
 // Joueur 2 //
-  // LEFT
-  if(key == 'k') keys[4] = true;
-  // RIGHT
-  if(key == 'm') keys[5] = true;
-  // UP
-  if(key == 'o') keys[6] = true;
-  // DOWN
-  if(key == 'l') keys[7] = true;
+  if(key == 'k') keys[4] = true;  // LEFT
+  if(key == 'm') keys[5] = true;  // RIGHT
+  if(key == 'o') keys[6] = true;  // UP
+  if(key == 'l') keys[7] = true;  // DOWN
 }
 
 void keyReleased(){
 // Joueur 1 //
-  // LEFT
   if(key == 'q') keys[0] = false;
-  // RIGHT
   if(key == 'd') keys[1] = false;
-  // UP
   if(key == 'z') keys[2] = false;
-  // DOWN
   if(key == 's') keys[3] = false;
   
 // Joueur 2 //
-  // LEFT
   if(key == 'k') keys[4] = false;
-  // RIGHT
   if(key == 'm') keys[5] = false;
-  // UP
   if(key == 'o') keys[6] = false;
-  // DOWN
   if(key == 'l') keys[7] = false; 
 }
 
@@ -110,17 +95,55 @@ void sol(){
   }
 }
 
+void mur(){
+  if(p1x <= 0) p1x = 0;
+  if(p2x <= 0) p2x = 0;
+  if(p1x + p1width >= width) p1x = width - p1width;
+  if(p2x + p2width >= width) p2x = width - p2width;
+}
+
 void gravite(){
   if(saut1){
-    p1y -= speed;
+    p1y -= speed1;
     if(p1y >= sol - p1height){
       p1y = sol - p1height;
-      speed = initspeed;
+      speed1 = initspeed;
       saut1 = false;
     } else {
-      speed -= gravity;
+      speed1 -= gravity;
     }
   }
+  
+  if(saut2){
+    p2y -= speed2;
+    if(p2y >= sol - p2height){
+      p2y = sol - p2height;
+      speed2 = initspeed;
+      saut2 = false;
+    } else {
+      speed2 -= gravity;
+    }
+  }
+}
+
+int verifSuperposition(){
+  for(int x1 = p1x; x1 < p1x + p1width; x1++)
+    for(int y1 = p1y; y1 < p1y + p1height; y1++)
+      for(int x2 = p2x; x2 < p2x + p2width; x2++)
+        for(int y2 = p2y; y2 < p2y + p2height; y2++)
+          if(x1 == x2 && y1 == y2) sum_collision++;
+  return sum_collision;
+}
+
+int verifAlignement(){
+  for(int x1 = p1x; x1 < p1x + p1width; x1++)
+    for(int x2 = p2x; x2 < p2x + p2width; x2++)
+      if(x1 == x2) sum_collision++;
+  return sum_collision;
+}
+
+void superposition(){
+  if(verifSuperposition() != 0 && verifAlignement() != 0) p1y = sol - p1height - p2height;
 }
 
 int verifCollisionLeft1(){
