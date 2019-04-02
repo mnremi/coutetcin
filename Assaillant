@@ -1,0 +1,60 @@
+class Assaillant {
+  int pos_x;
+  int pos_y;
+  float vitesse;
+  color couleur;
+  PImage image;
+  boolean existe = false;
+  
+  Assaillant(int init_x, int init_y, float init_vitesse, color init_couleur, PImage init_image){
+    this.pos_x = init_x;
+    this.pos_y = init_y;
+    this.vitesse = init_vitesse;
+    this.couleur = init_couleur;
+    this.existe = true;
+    this.image = init_image;
+  }
+  
+  void affichage(){
+    if(existe){
+    fill(couleur*2,couleur/2,-couleur);
+    rect(pos_x, pos_y, assaillant_width, assaillant_height);
+    }
+  }
+  
+  void deplacement(){
+    this.pos_x -= vitesse;
+  }
+  
+  void destruction(){
+    this.existe = false;
+    this.pos_x = -100;
+    this.pos_y = -100;
+  }
+  
+  boolean collision(int ytir, int htir, int xtir){
+    for(int y1 = ytir; y1 < ytir + htir; y1++){
+      for(int y2 = pos_y; y2 < pos_y + assaillant_height; y2++){
+        if(y1 == y2) return true;
+      }
+    }
+    
+    return false; 
+  }
+  
+  int getX(){
+    return pos_x;
+  }
+  
+  int getY(){
+    return pos_y;
+  }
+  
+  boolean getExiste(){
+   return existe; 
+  }
+  
+  PImage getImage(){
+   return image; 
+  }
+}
