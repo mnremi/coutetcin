@@ -1,68 +1,66 @@
-
 class Tir {
-  int pos_x = vaisseau_x + vaisseau_width;
-  int pos_y;
-  int largeur = 40;
-  int hauteur = 6;
-  float vitesse;
-  boolean existe = false;
-  PImage image;
+  int t_posx = vaisseau[0].getVposX();
+  int t_posy;
+  int t_width = 40;
+  int t_height = 6;
+  int t_indice;
+  float t_vitesse = 10;
+  boolean t_existe = false;
   
-  Tir(int init_y, float init_vitesse){
-    this.pos_y = init_y;
-    this.vitesse = init_vitesse;
-    this.existe = true;
-  }
-  
-  void affichage(){
-    if(existe){
-    fill((int) random(0,255), (int) random(0,255), (int) random(0,255));
-    rect(pos_x, pos_y + ((vaisseau_height - hauteur) / 2), largeur, hauteur);
-    }
+  Tir(int posy, int indice;){
+    this.t_posy = posy;
+    this.t_indice = indice;
+    this.t_existe = true;
   }
   
   void deplacement(){
-    this.pos_x += vitesse;
-  }
-  
-  void sortie(){
-    if(pos_x < 0 || pos_x > width) destruction();
-  }
-  
-  void destruction(){
-    this.existe = false;
-    this.largeur = 0;
-    this.hauteur = 0;
-    this.pos_x = -100;
-    this.pos_y = -100;
-  }
-  
-  void collision(){
-    for(int assaillant = 0; assaillant < assaillants.length; assaillant++){
-      if(assaillants[assaillant].getExiste()){
-        if(assaillants[assaillant].getX() < pos_x){
-          if(assaillants[assaillant].collision(pos_y, hauteur, pos_x)){
-            destruction();
-            assaillants[assaillant].destruction();
-          }
-        }
-      }
+    this.t_posx += t_vitesse;
+    if(t_posx < width) this.t_existe = true;
+    else {
+      this.t_existe = false;
+      tirs_verifiables = indice;
     }
   }
   
-  int getX(){
-    return pos_x;
+  void affichage(){
+    fill((int) random(0,255), (int) random(0,255), (int) random(0,255));
+    rect(t_posx, t_posy, t_width, t_height);
   }
   
-  int getY(){
-    return pos_y;
+//  void sortie(){
+//    if(pos_x < 0 || pos_x > width) destruction();
+//  }
+//  
+//  void destruction(){
+//    this.existe = false;
+//    this.largeur = 0;
+//    this.hauteur = 0;
+//    this.pos_x = -100;
+//    this.pos_y = -100;
+//  }
+  
+//  void collision(){
+//    for(int assaillant = 0; assaillant < assaillants.length; assaillant++){
+//      if(assaillants[assaillant].getExiste()){
+//        if(assaillants[assaillant].getX() < pos_x){
+//          if(assaillants[assaillant].collision(pos_y, hauteur, pos_x)){
+//            destruction();
+//            assaillants[assaillant].destruction();
+//          }
+//        }
+//      }
+//    }
+//  }
+    
+  boolean getExistence(){
+    return t_existe;
   }
   
-  boolean getExiste(){
-    return existe;
+  int getTposX(){
+    return t_posx;
   }
   
-  PImage getImage(){
-   return image; 
+  int getTposY(){
+    return t_posy;
   }
 }
