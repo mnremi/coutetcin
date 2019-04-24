@@ -7,19 +7,10 @@ class Tir {
   float t_vitesse = 10;
   boolean t_existe = false;
   
-  Tir(int posy, int indice;){
+  Tir(int posy, int indice){
     this.t_posy = posy;
     this.t_indice = indice;
     this.t_existe = true;
-  }
-  
-  void deplacement(){
-    this.t_posx += t_vitesse;
-    if(t_posx < width) this.t_existe = true;
-    else {
-      this.t_existe = false;
-      tirs_verifiables = indice;
-    }
   }
   
   void affichage(){
@@ -27,31 +18,23 @@ class Tir {
     rect(t_posx, t_posy, t_width, t_height);
   }
   
-//  void sortie(){
-//    if(pos_x < 0 || pos_x > width) destruction();
-//  }
-//  
-//  void destruction(){
-//    this.existe = false;
-//    this.largeur = 0;
-//    this.hauteur = 0;
-//    this.pos_x = -100;
-//    this.pos_y = -100;
-//  }
+  void deplacement(){
+    this.t_posx += t_vitesse;
+    if(t_posx < width) this.t_existe = true;
+    else {
+      this.t_existe = false;
+      tir_min = this.t_indice;
+    }
+  }
+
+  void destruction(){
+    this.t_posx = 0;
+    this.t_posy = 0;
+    this.t_width = 0;
+    this.t_height = 0;
+    this.t_existe = false;
+  }
   
-//  void collision(){
-//    for(int assaillant = 0; assaillant < assaillants.length; assaillant++){
-//      if(assaillants[assaillant].getExiste()){
-//        if(assaillants[assaillant].getX() < pos_x){
-//          if(assaillants[assaillant].collision(pos_y, hauteur, pos_x)){
-//            destruction();
-//            assaillants[assaillant].destruction();
-//          }
-//        }
-//      }
-//    }
-//  }
-    
   boolean getExistence(){
     return t_existe;
   }
@@ -62,5 +45,13 @@ class Tir {
   
   int getTposY(){
     return t_posy;
+  }
+  
+  int getTwidth(){
+    return t_width;
+  }
+  
+  int getTheight(){
+    return t_height;
   }
 }
