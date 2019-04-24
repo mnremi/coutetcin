@@ -1,4 +1,3 @@
-PImage img_vaisseau, img_assaillant;
 boolean keys[];
 int tir_min;
 
@@ -9,9 +8,6 @@ Tir[] tir = new Tir[1000000];
 void setup(){
   size(1024,768);
   frameRate(60);
-  
-  img_vaisseau = loadImage("vaisseau.png");
-  img_assaillant = loadImage("assaillant.png");
   
   keys = new boolean[3];
   for(int i = 0; i < assaillants.length; i++) assaillants[i] = new Assaillant(ceil(random(width, width + 20000)), ceil(random(height - 30)));
