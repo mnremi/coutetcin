@@ -54,3 +54,4 @@ class Vaisseau {
     return v_tirs;
   }
 }
+
