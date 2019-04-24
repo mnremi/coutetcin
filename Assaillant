@@ -13,30 +13,46 @@ class Assaillant {
     this.a_existe = true;
   }
   
+  void affichage(){
+    fill(125);
+    rect(a_posx, a_posy, a_width, a_height);
+  }
+  
   void deplacement(){
     this.a_posx -= a_vitesse;
     if(a_posx < width) this.a_visible = true;
+    if(a_posx < -a_width) destruction(-1);
+  }
+  
+  void collision(){
+    for(int i = tir_min; i < vaisseau[0].getVtirs(); i++){
+      int tir_x = tir[i].getTposX();
+      int tir_y = tir[i].getTposY();
+      int tir_width = tir[i].getTwidth();
+      int tir_height = tir[i].getTheight();
+      
+      if(a_posx <= tir_x + tir_width)
+        for(int t_y = tir_y; t_y < tir_y + tir_height; t_y++)
+          if(t_y >= a_posy && t_y <= a_posy + a_height) destruction(i);
+    }
   }
 
-  void affichage(){
-    fill(120);
-    rect(a_posx, a_posy, a_width, a_height);
+  void destruction(int t_indice){
+    this.a_posx = 0;
+    this.a_posy = 0;
+    this.a_width = 0;
+    this.a_height = 0;
+    this.a_existe = false;
+    this.a_visible = false;
+
+    if(t_indice != -1) tir[t_indice].destruction();
   }
 
   boolean getExistence(){
     return a_existe;
   }
-  
+
   boolean getVisibilite(){
     return a_visible;
   }
-//  boolean collision(int ytir, int htir, int xtir){
-//    for(int y1 = ytir; y1 < ytir + htir; y1++){
-//      for(int y2 = pos_y; y2 < pos_y + assaillant_height; y2++){
-//        if(y1 == y2) return true;
-//      }
-//    }
-//    
-//    return false; 
-//  }
 }
