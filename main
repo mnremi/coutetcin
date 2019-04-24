@@ -1,19 +1,20 @@
+PImage img_vaisseau, img_assaillant;
 boolean keys[];
-int tir_verifiables;
+int tir_min;
 
-// Initalisation des assaillants
-Assaillant[] assaillants = new Assaillant[100000];
-// Initalisation du vaisseau
+Assaillant[] assaillants = new Assaillant[300];
 Vaisseau[] vaisseau = new Vaisseau[1];
-// Initalisation des tirs
-Tir[] tir = new Tir[1000];
+Tir[] tir = new Tir[1000000];
 
 void setup(){
   size(1024,768);
   frameRate(60);
   
+  img_vaisseau = loadImage("vaisseau.png");
+  img_assaillant = loadImage("assaillant.png");
+  
   keys = new boolean[3];
-  for(int i = 0; i < assaillants.length; i++) assaillants[i] = new Assaillant(ceil(random(width, width + 20000)), ceil(random(height)));
+  for(int i = 0; i < assaillants.length; i++) assaillants[i] = new Assaillant(ceil(random(width, width + 20000)), ceil(random(height - 30)));
   vaisseau[0] = new Vaisseau();
 }
 
@@ -24,7 +25,7 @@ void draw(){
     vaisseau[0].affichage();
     vaisseau[0].deplacement();
     vaisseau[0].sortie();
-  }  
+  }
 
   for(int i = 0; i < vaisseau[0].getVtirs(); i++){
     if(tir[i].getExistence()){
@@ -35,10 +36,12 @@ void draw(){
 
   for(int i = 0; i < assaillants.length; i++){
     if(assaillants[i].getExistence()) assaillants[i].deplacement();
-    if(assaillants[i].getVisibilite()) assaillants[i].affichage();
+    if(assaillants[i].getVisibilite()){
+      assaillants[i].affichage();
+      assaillants[i].collision();
+    }
   }
 }
-
 
 void keyPressed(){
   if(key == 'e' || key == 'E') keys[0] = true;
@@ -51,7 +54,3 @@ void keyReleased(){
   if(key == 'c' || key == 'C') keys[1] = false;
   if(key == ' ') keys[2] = false;
 }
-
-// Puisque les tirs sont tirés à l a suite et que leurs indices de créations montreront le chemin
-// Vérifier les collisions seulement pour ceux qui sont créés
-// DOnc lorsqu'un tir sort de l'écran, il change une variable par son indice et influera sur les verifs à venir
