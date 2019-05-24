@@ -1,57 +1,23 @@
 class Tir {
-  int t_posx = vaisseau[0].getVposX();
+  // Attributs par défaut d'un objet "Tir"
+  int t_posx = vaisseau.get(0).v_posx + vaisseau.get(0).v_width;
   int t_posy;
-  int t_width = 40;
-  int t_height = 6;
-  int t_indice;
-  float t_vitesse = 10;
-  boolean t_existe = false;
-  
-  Tir(int posy, int indice){
+  int t_width = 64;
+  int t_height = 24;
+  int t_random;
+  float t_vitesse = width/100;
+
+  // Constructeur d'un objet "Tir"
+  Tir(int posy) {
     this.t_posy = posy;
-    this.t_indice = indice;
-    this.t_existe = true;
-  }
-  
-  void affichage(){
-    fill((int) random(0,255), (int) random(0,255), (int) random(0,255));
-    rect(t_posx, t_posy, t_width, t_height);
-  }
-  
-  void deplacement(){
-    this.t_posx += t_vitesse;
-    if(t_posx < width) this.t_existe = true;
-    else {
-      this.t_existe = false;
-      tir_min = this.t_indice;
-    }
+    this.t_random = ceil(random(-1, 3));
   }
 
-  void destruction(){
-    this.t_posx = 0;
-    this.t_posy = 0;
-    this.t_width = 0;
-    this.t_height = 0;
-    this.t_existe = false;
-  }
-  
-  boolean getExistence(){
-    return t_existe;
-  }
-  
-  int getTposX(){
-    return t_posx;
-  }
-  
-  int getTposY(){
-    return t_posy;
-  }
-  
-  int getTwidth(){
-    return t_width;
-  }
-  
-  int getTheight(){
-    return t_height;
+  // Méthode d'affichage
+  void affichage(int i) {
+    this.t_posx += t_vitesse;
+    if (t_posx > width) tirs.remove(i);
+
+    image(t_tab[t_random], t_posx, t_posy-12, t_width, t_height);
   }
 }
