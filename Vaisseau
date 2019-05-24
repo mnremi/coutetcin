@@ -1,57 +1,36 @@
 class Vaisseau {
+  // Attributs par défaut d'un objet "Vaisseau"
   int v_posx = 10;
   int v_posy = 10;
-  int v_width = 50;
-  int v_height = 50;
-  int v_vitesse = 10;
-  int v_tirs = 0;
-  boolean v_existe = false;
-  
-  Vaisseau(){
-    this.v_existe = true;
-  }
-  
-  void affichage(){
-    fill(5);
-    rect(v_posx, v_posy, v_width, v_height);
-  }
-  
-  void deplacement(){
-    if(keys[0] == true) this.v_posy -= v_vitesse;
-    if(keys[1] == true) this.v_posy += v_vitesse;
-    if(keys[2] == true) tirer();
+  int v_width = 100;
+  int v_height = 100;
+  int v_vitesse = width/100;
+
+  // Constructeur d'un objet "Vaisseau"
+  Vaisseau() {
   }
 
-  void sortie(){
-    if(v_posy < 0) this.v_posy = 0;
-    if(v_posy + v_height > height) this.v_posy = height - v_height;
+  // Méthode d'affichage
+  void affichage() {
+    fill(0);
+
+    if (v_posy < 0) this.v_posy = 0;
+    if (v_posy + v_height > height) this.v_posy = height - v_height;
+
+    image(v_tab[v_boucle], v_posx, v_posy, v_width, v_height);
   }
 
-  void tirer(){
-    tir[v_tirs] = new Tir(v_posy + (v_height/2), v_tirs);
-    this.v_tirs += 1;
+  // Méthode de déplacement en fonction des touches préssées, lancer de tir
+  void deplacement() {
+    if (keys[0] == true) this.v_posy -= v_vitesse;
+    if (keys[1] == true) this.v_posy += v_vitesse;
+    if (keys[2] == true) tirer();
+  }
 
+  // Méthode de création d'objet "Tir"
+  void tirer() {
+    tirs.add(new Tir(v_posy + (v_height/2)));
+    son_tirs.play(tirs.size());
     keys[2] = false;
   }
-  
-  boolean getExistence(){
-    return v_existe;
-  }
-
-  int getVposX(){
-    return v_posx;
-  }
-  
-  int getVposY(){
-    return v_posy;
-  }
-  
-  int getVwidth(){
-    return v_width;
-  }
-  
-  int getVtirs(){
-    return v_tirs;
-  }
 }
-
