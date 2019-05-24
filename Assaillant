@@ -1,58 +1,66 @@
 class Assaillant {
-  int a_posx;
+  // Attributs par défaut d'un objet "Assaillant"
+  int a_posx = width;
   int a_posy;
-  int a_width = 30;
-  int a_height = 30;
-  float a_vitesse = 2;
-  boolean a_existe = false;
-  boolean a_visible = false;
-  
-  Assaillant(int posx, int posy){
-    this.a_posx = posx;
+  int a_width = 100;
+  int a_height = 100;
+  int a_random = 0 ;
+  float a_vitesse;
+
+  // Constructeur d'un objet "Assaillant"
+  Assaillant(int posy, int vitesse) {
     this.a_posy = posy;
-    this.a_existe = true;
+    this.a_vitesse = vitesse;
+    // Entier assignant un sprite aléatoirement
+    this.a_random = ceil(random(0, 4));
   }
-  
-  void affichage(){
-    fill(125);
-    rect(a_posx, a_posy, a_width, a_height);
-  }
-  
-  void deplacement(){
+
+  // Méthode d'affichage
+  void affichage() {
     this.a_posx -= a_vitesse;
-    if(a_posx < width) this.a_visible = true;
-    if(a_posx < -a_width) destruction(-1);
+    // Détection de sortie de mur
+    if (a_posx < 0) {
+      defaite = true;
+      ingame = false;
+    }
+
+    fill(125);   
+    sprite();
   }
-  
-  void collision(){
-    for(int i = tir_min; i < vaisseau[0].getVtirs(); i++){
-      int tir_x = tir[i].getTposX();
-      int tir_y = tir[i].getTposY();
-      int tir_width = tir[i].getTwidth();
-      int tir_height = tir[i].getTheight();
-      
-      if(a_posx <= tir_x + tir_width)
-        for(int t_y = tir_y; t_y < tir_y + tir_height; t_y++)
-          if(t_y >= a_posy && t_y <= a_posy + a_height) destruction(i);
+
+  // Méthode de vérification de collision
+  void collision(int a_indice) {
+    for (int i = 0; i < tirs.size(); i++) {
+      // Récupère les attributs de l'objet "Tir"
+      int t_x = tirs.get(i).t_posx;
+      int t_y = tirs.get(i).t_posy;
+      int t_width = tirs.get(i).t_width;
+      int t_height = tirs.get(i).t_height;
+
+      if (a_posx <= t_x + t_width)
+        for (int tir_y = t_y; tir_y < t_y + t_height; tir_y++)
+          if (tir_y >= a_posy && tir_y <= a_posy + a_height) {
+            // S'il y a collision, activation du son et destruction des objets "Assaillant" et "Tir" concernés
+            son_boom.play(i);
+            assaillants.remove(a_indice);
+            objectif -= 1;
+            tirs.remove(i);
+            
+            // Affichage du sprite de destruction
+            if (a_random == 1) image(a_tab1[2], a_posx, a_posy, a_width, a_height);
+            if (a_random == 2) image(a_tab2[2], a_posx, a_posy, a_width, a_height);
+            if (a_random == 3) image(a_tab3[2], a_posx, a_posy, a_width, a_height);
+            if (a_random == 4) image(a_tab4[2], a_posx, a_posy, a_width, a_height);
+            break;
+          }
     }
   }
 
-  void destruction(int t_indice){
-    this.a_posx = 0;
-    this.a_posy = 0;
-    this.a_width = 0;
-    this.a_height = 0;
-    this.a_existe = false;
-    this.a_visible = false;
-
-    if(t_indice != -1) tir[t_indice].destruction();
-  }
-
-  boolean getExistence(){
-    return a_existe;
-  }
-
-  boolean getVisibilite(){
-    return a_visible;
+  // Méthode d'assignation de sprite
+  void sprite() {
+    if (a_random == 1) image(a_tab1[a_boucle], a_posx, a_posy, a_width, a_height);
+    if (a_random == 2) image(a_tab2[a_boucle], a_posx, a_posy, a_width, a_height);
+    if (a_random == 3) image(a_tab3[a_boucle], a_posx, a_posy, a_width, a_height);
+    if (a_random == 4) image(a_tab4[a_boucle], a_posx, a_posy, a_width, a_height);
   }
 }
